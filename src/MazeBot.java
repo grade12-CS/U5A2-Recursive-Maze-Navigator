@@ -1,5 +1,7 @@
 import becker.robots.*;
 import java.awt.Color;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Stack;
 import java.util.HashMap;
@@ -11,6 +13,7 @@ public class MazeBot extends DaveSoftware{
     private Point thingPoint;
     private final Point home;
     public boolean shouldGoHome = false;
+    private int numOfPaths = 0;
 
     private final int streets, avenues;
     
@@ -156,11 +159,28 @@ public class MazeBot extends DaveSoftware{
             path.add(node.parent.point);
             node = node.parent;
         }
+        numOfPaths ++;
+        writePathFile(path);
         return path;
+    }
+    
+    public void writePathFile(Stack<Point> path) {
+        Stack<Point> copy = (Stack<Point>)path.clone();
+        String fileName = "path" + numOfPaths + ".txt";
+        System.out.println(numOfPaths);
+        try (FileWriter fw = new FileWriter(fileName)) {
+            while (!copy.isEmpty()) {
+                Point p = copy.removeFirst();
+                fw.write(p.toString() + "\n"); 
+            }           
+            fw.close();
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
     }
 
     /**
-     * go pick the thing using a recursion 
+     * go pick the thing recursively 
      */
     public void solve(Stack<Point> path) {
         if (path.isEmpty()) {
