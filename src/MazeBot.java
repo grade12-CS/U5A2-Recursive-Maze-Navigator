@@ -15,8 +15,19 @@ public class MazeBot extends DaveSoftware{
     public boolean shouldGoHome = false;
     private int numOfPaths = 0;
 
+    /**
+     * dimensions of the current maze
+     */
     private final int streets, avenues;
     
+    /**
+     * initializes a maze bot 
+     * @param city maze the robot is created
+     * @param y y-coordinate of starting point or home
+     * @param x x-coordinate of starting poitn or home
+     * @param streets height of maze
+     * @param avenues width of maze
+     */
     public MazeBot(City city, int y, int x, int streets, int avenues) {
         super(city, y, x);
         this.streets = streets;
@@ -36,6 +47,9 @@ public class MazeBot extends DaveSoftware{
         put(new Point(1, 0), Direction.EAST);
     }};
 
+    /**
+     * search for thing infinitely and recursivley
+     */
     public void infiniteSearching() {
         if (shouldGoHome) {
             goHome();
@@ -50,11 +64,15 @@ public class MazeBot extends DaveSoftware{
         HashSet<Point> visited = new HashSet<>();
         Stack<Point> pathToTreasure = findShortestPath(true, getCurrent(), thingPoint, path, toVisit, visited); 
         solve(pathToTreasure);
-        createThingRandomly();
         invisiblizeDummyBots();
+        //create a new thing and go to find it
+        createThingRandomly();
         infiniteSearching();
     }
 
+    /**
+     * make all dummy bots created during a thing search transparent
+     */
     public void invisiblizeDummyBots() {
         if (dummyBag.isEmpty()) {
             return;
@@ -65,6 +83,9 @@ public class MazeBot extends DaveSoftware{
         invisiblizeDummyBots();
     }
 
+    /**
+     * an array list to store dummy bots during a thing search
+     */
     ArrayList<RobotSE> dummyBag = new ArrayList<>();
     /**
      * find shortest path using fancy A* algorithm with recursion
@@ -164,6 +185,10 @@ public class MazeBot extends DaveSoftware{
         return path;
     }
     
+    /**
+     * record a newly created path by writing a file point by point in the path stack
+     * @param path
+     */
     public void writePathFile(Stack<Point> path) {
         Stack<Point> copy = (Stack<Point>)path.clone();
         String fileName = "path" + numOfPaths + ".txt";
@@ -208,6 +233,9 @@ public class MazeBot extends DaveSoftware{
         shouldGoHome = false;
     }
 
+    /**
+     * create a thing at a random point on a map
+     */
     public void createThingRandomly() {
         thingPoint = Point.createRandomPoint(0, streets-1, 0, avenues-1);
         treasure = new Thing(getCity(), thingPoint.y, thingPoint.x);
