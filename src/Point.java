@@ -4,7 +4,7 @@ import java.util.Random;
  * A Point class to pick out location easily on the map 
  */
 public class Point {
-    public final int x, y; 
+    public int x, y; 
     private static final Random r = new Random();
 
     public Point(int x, int y) {

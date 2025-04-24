@@ -1,5 +1,7 @@
 import becker.robots.*;
 import java.awt.Color;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,7 +12,7 @@ import java.util.PriorityQueue;
 
 public class MazeBot extends DaveSoftware{
     private Thing treasure;
-    private Point thingPoint;
+    private  Point thingPoint;
     private final Point home;
     public boolean shouldGoHome = false;
     private int numOfPaths = 0;
@@ -204,6 +206,31 @@ public class MazeBot extends DaveSoftware{
         }
     }
 
+    /**
+     * obtain a path by reading an existing path file and parsing the point data into Point type 
+     * @param pathFilePath the path to the file
+     * @return path of points to a treasure in Stack<Point> type
+     */
+    public Stack<Point> getPathFromFile(String pathFilePath) {
+        Stack<Point> path = new Stack<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(pathFilePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                ArrayList<Integer> digits = new ArrayList<>();
+                for (char c : line.toCharArray()) {
+                    if (!Character.isDigit(c)) {
+                        continue;
+                    }
+                    digits.add(c - '0');
+                } 
+                Point p = new Point(digits.getFirst(), digits.getLast());
+                path.push(p);
+            }
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
+        return path;
+    }
     /**
      * go pick the thing recursively 
      */

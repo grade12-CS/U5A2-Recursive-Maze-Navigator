@@ -14,11 +14,11 @@ public class RobotMain {
         final int avenues = 10;
         City maze = new MazeCity(streets, avenues);
         MazeBot mB = new MazeBot(maze, 3,4, streets, avenues);
-        //for (String arg : args) {
-            //if (arg.equals("go home")) {
-                //mB.shouldGoHome = true;
-            //}
-        //}
+        for (String arg : args) {
+            if (arg.equals("home")) {
+                mB.shouldGoHome = true;
+            }
+        }
         mB.infiniteSearching();
     }
 }
